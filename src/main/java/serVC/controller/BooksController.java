@@ -5,17 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import serVC.domain.Book;
+import serVC.dto.BookDto;
 import serVC.service.BookService;
-
-
-import javax.persistence.criteria.CriteriaBuilder;
+import serVC.utils.validations.New;
+import serVC.utils.validations.Update;
 import java.util.List;
 
 @RestController
 @RequestMapping("/books")
 @RequiredArgsConstructor
+@Validated
 public class BooksController {
 
     private final BookService bookService;
@@ -38,9 +40,9 @@ public class BooksController {
     }
 
     @PostMapping()
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<Book> createBook(@RequestBody @Validated(New.class) BookDto bookDto) {
         return new ResponseEntity<>(
-                bookService.create(book),
+                bookService.updateOrSave(bookDto),
                 HttpStatus.CREATED
         );
     }
@@ -52,8 +54,8 @@ public class BooksController {
     }
 
     @PutMapping()
-    public ResponseEntity<Void> update(@RequestBody Book book) {
-        bookService.update(book);
+    public ResponseEntity<Void> update(@RequestBody  @Validated(Update.class) BookDto bookDto) {
+        bookService.updateOrSave(bookDto);
         return ResponseEntity.ok().build();
     }
 }

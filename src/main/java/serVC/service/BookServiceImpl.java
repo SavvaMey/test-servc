@@ -6,8 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import serVC.domain.Author;
 import serVC.domain.Book;
+import serVC.dto.BookDto;
+import serVC.exceptions.AuthorException;
 import serVC.exceptions.SortException;
+import serVC.repo.AuthorsRepo;
 import serVC.repo.BooksRepo;
 
 import java.util.ArrayList;
@@ -19,7 +23,9 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService{
 
     private final BooksRepo booksRepo;
+    private final AuthorsRepo authorsRepo;
 
+    @Transactional(readOnly = true)
     @Override
     public List<Book> getAllBooks(Integer amountRows, Integer skipRows, String sort) {
         Sort sortObj = createSort(sort);
@@ -57,15 +63,10 @@ public class BookServiceImpl implements BookService{
         return Sort.by(orderList);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Book> getBook(Integer id) {
         return booksRepo.findById(id);
-    }
-
-    @Transactional
-    @Override
-    public Book create(Book book) {
-        return booksRepo.save(book);
     }
 
     @Transactional
@@ -77,11 +78,17 @@ public class BookServiceImpl implements BookService{
 
     @Transactional
     @Override
-    public void update(Book book) {
-        booksRepo.save(book);
+    public Book updateOrSave(BookDto bookDto) {
+        Author author = authorsRepo.findById(bookDto.getAuthorId())
+                .orElseThrow(()-> new AuthorException("No such author"));
+            return booksRepo.save(Book.builder()
+                    .id(bookDto.getId())
+                    .author(author)
+                    .isbn(bookDto.getIsbn())
+                    .name(bookDto.getName())
+                    .releaseDate(bookDto.getReleaseDate())
+                    .build());
     }
-
-
 
 
 }

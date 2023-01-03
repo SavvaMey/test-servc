@@ -6,6 +6,11 @@ Accept: application/json
 GET localhost:8080/books?sort=name:asc,isbn:desc
 Accept: application/json
 
+### GET Books -  sort
+GET localhost:8080/books?sort=author.fullName:desc
+Accept: application/json
+
+
 ### GET Books -  sort with bad req
 GET localhost:8080/books?sort=nameasc
 Accept: application/json
@@ -26,14 +31,18 @@ Accept: application/json
 DELETE localhost:8080/books/1
 Accept: application/json
 
+### GET Book -  id
+GET localhost:8080/books/1
+Accept: application/json
+
 ### Send POST
 POST localhost:8080/books/
 Content-Type: application/json
 
 {
-  "name": "book",
+  "name": "bookNewNew",
   "isbn": "800-05-05",
-  "author": "Test",
+  "authorId": 1,
   "releaseDate": "2022-05-05"
 }
 
@@ -41,14 +50,19 @@ Content-Type: application/json
 GET localhost:8080/books/5
 Content-Type: application/json
 
+
 ### Send PUT
 PUT localhost:8080/books/
 Content-Type: application/json
 
 {
-  "id" : 1,
-  "name": "book12",
-  "isbn": "800-05-05-05",
-  "author": "Test12",
+  "id" : 5,
+  "name": "book121212121212341324324",
+  "isbn": "80012-05-05-05",
+  "authorId": 1,
   "releaseDate": "2022-05-05"
 }
+
+### Send GET
+GET localhost:8080/books/5
+Content-Type: application/json

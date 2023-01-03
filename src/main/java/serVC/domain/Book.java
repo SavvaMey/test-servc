@@ -1,13 +1,8 @@
 package serVC.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Entity
 @Table(name = "books")
@@ -15,6 +10,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Book {
 
     @Id
@@ -28,8 +24,10 @@ public class Book {
     @Column(name = "isbn")
     private String isbn;
 
-    @Column(name = "author")
-    private String author;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
     @Column(name = "release_date")
     private String releaseDate;
