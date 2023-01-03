@@ -1,0 +1,9 @@
+DROP TABLE books;
+CREATE TABLE IF NOT EXISTS books (
+    id INTEGER NOT NULL ,
+    name TEXT NOT NULL,
+    isbn TEXT UNIQUE NOT NULL,
+    author TEXT NOT NULL,
+    release_date TEXT NOT NULL,
+    PRIMARY KEY("id" AUTOINCREMENT)
+);
